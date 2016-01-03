@@ -11,11 +11,10 @@
  */
 
 var React = require('react');
-var keymirror = require('keymirror');
 
-var User = require('./User.react.js');
+var keymirror = require('keymirror');
 var routes = keymirror({
-	'MAIN':null
+	'MAIN':null,
 	'NEW_USER':null,
 	'MILITARY':null,
 	'TREASURY':null,
@@ -26,29 +25,55 @@ var routes = keymirror({
 	'SCIENCE':null
 });
 
-var ChatApp = React.createClass({
+var routable = function(Component) {
+	var routableComponent = React.createClass({
+		getInitialState: function() {
+			return {
+				route: routes.MAIN
+			};
+		},
 
-	getInitialState: function() {
-		return {
-			route: routes.MAIN
+		handleChangeRoute: function(route_name) {
+			this.setState({route: route_name});
+		},
+
+		render: function() {
+			return <Component
+				onChangeRoute={this.handleChangeRoute}
+				route={this.state.route}
+				{...this.props}
+			/>;
 		}
+	});
+	return routableComponent;
+}
+
+var Pages = {};
+Pages[routes.MAIN] = React.createClass({
+	handleClickNewUser: function(e) {
+		this.props.onChangeRoute(routes.NEW_USER);
 	},
 
-	changeRoute: function(route_name) {
-		return function(e) {
-			this.setState({route: route_name});	
-		}.bind(this);
-	},
+	render: function() {
+		return <a href="#" onClick={this.handleClickNewUser}>Create new user</a>;
+	}
+});
 
+Pages[routes.NEW_USER] = require('./User.react.js');
+// Pages[routes.MILITARY] = require('./Military.react.js');
+// Pages[routes.TREASURY] = require('./Treasury.react.js');
+// Pages[routes.WONDER] = require('./Wonder.react.js');
+// Pages[routes.CIVILIAN] = require('./Civilian.react.js');
+// Pages[routes.COMMERCIAL] = require('./Commercial.react.js');
+// Pages[routes.GUILD] = require('./Guild.react.js');
+// Pages[routes.SCIENCE] = require('./Science.react.js');
+
+var ChatApp = React.createClass({
   render: function() {
-  	var content = routes[this.state.route];
-    return (
-      <div>
-      	<a href="#" onClick={this.changeRoute('new_user')}>Create new user</a>
-      </div>
-    );
+  	var Content = Pages[this.props.route];
+    return (<div><Content {...this.props}/></div>);
   }
 
 });
 
-module.exports = ChatApp;
+module.exports = routable(ChatApp);
