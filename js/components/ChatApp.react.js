@@ -13,8 +13,9 @@
 var React = require('react');
 var keymirror = require('keymirror');
 
-var User = require('./User.react');
+var User = require('./User.react.js');
 var routes = keymirror({
+	'MAIN':null
 	'NEW_USER':null,
 	'MILITARY':null,
 	'TREASURY':null,
@@ -29,18 +30,21 @@ var ChatApp = React.createClass({
 
 	getInitialState: function() {
 		return {
-			route: routes.NEW_USER
+			route: routes.MAIN
 		}
 	},
 
 	changeRoute: function(route_name) {
-		this.setState({route: route_name});
+		return function(e) {
+			this.setState({route: route_name});	
+		}.bind(this);
 	},
 
   render: function() {
+  	var content = routes[this.state.route];
     return (
       <div>
-      	<a href="#" onClick={this.changeRoute.call('new_user')}>Create new user</a>
+      	<a href="#" onClick={this.changeRoute('new_user')}>Create new user</a>
       </div>
     );
   }
