@@ -12,19 +12,8 @@
 
 var React = require('react');
 
-var keymirror = require('keymirror');
-var routes = keymirror({
-	'MAIN':null,
-	'NEW_USER':null,
-	'MILITARY':null,
-	'TREASURY':null,
-	'WONDER':null,
-	'CIVILIAN':null,
-	'COMMERCIAL':null,
-	'GUILD':null,
-	'SCIENCE':null
-});
-
+var ChatConstants = require('../constants/ChatConstants');
+var routes = ChatConstants.routes;
 var routable = function(Component) {
 	var routableComponent = React.createClass({
 		getInitialState: function() {
@@ -49,16 +38,7 @@ var routable = function(Component) {
 }
 
 var Pages = {};
-Pages[routes.MAIN] = React.createClass({
-	handleClickNewUser: function(e) {
-		this.props.onChangeRoute(routes.NEW_USER);
-	},
-
-	render: function() {
-		return <a href="#" onClick={this.handleClickNewUser}>Create new user</a>;
-	}
-});
-
+Pages[routes.MAIN] = require('./Main.react.js');
 Pages[routes.NEW_USER] = require('./User.react.js');
 // Pages[routes.MILITARY] = require('./Military.react.js');
 // Pages[routes.TREASURY] = require('./Treasury.react.js');

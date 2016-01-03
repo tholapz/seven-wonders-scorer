@@ -20,6 +20,17 @@ module.exports = {
     RECEIVE_RAW_CREATED_MESSAGE: null,
     RECEIVE_RAW_MESSAGES: null,
     NEW_USER: null
-  })
+  }),
+	routes: keyMirror({
+		'MAIN':null,
+		'NEW_USER':null,
+		'MILITARY':null,
+		'TREASURY':null,
+		'WONDER':null,
+		'CIVILIAN':null,
+		'COMMERCIAL':null,
+		'GUILD':null,
+		'SCIENCE':null
+	})
 
 };

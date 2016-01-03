@@ -16,6 +16,10 @@ var ScoreStore = assign({}, EventEmitter, {
 
 	removeChangeListener: function(callback) {
 		this.removeListener(CHANGE_EVENT, callback);
+	},
+
+	getScores: function() {
+		return _scores;
 	}
 
 });

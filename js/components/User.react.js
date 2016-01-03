@@ -1,5 +1,8 @@
 var React = require('react');
 var Actions = require('../actions/ScoreActionCreators');
+var ChatConstants = require('../constants/ChatConstants');
+var routes = ChatConstants.routes;
+
 var User = React.createClass({
 
 	getInitialState: function() {
@@ -16,6 +19,7 @@ var User = React.createClass({
 
 	handleClickSubmit: function(e) {
 		Actions.addNewUser(this.state.name);
+		this.props.onChangeRoute(routes.MAIN);
 	},
 
 	render: function() {
