@@ -27,6 +27,10 @@ var ScoreStore = assign({}, EventEmitter.prototype, {
 
 	getScores: function() {
 		return _scores;
+	},
+
+	getPlayerByName: function(name) {
+		return _scores[name];
 	}
 
 });

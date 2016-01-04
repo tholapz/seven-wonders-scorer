@@ -24,8 +24,11 @@ var Main = React.createClass({
 		this.props.onChangeRoute(routes.NEW_USER);
 	},
 
-	handleClickUser: function(e) {
-
+	handleClickUser: function(name) {
+		return function(e) {
+			this.props.onChangePlayer(name);
+			this.props.onChangeRoute(routes.MILITARY);
+		}.bind(this);
 	},
 
 	_change: function() {
@@ -43,7 +46,7 @@ var Main = React.createClass({
 					<td>
 						<a
 							href="#"
-							onClick={this.handleClickUser(player)}
+							onClick={this.handleClickUser(playerName)}
 						>
 							{playerName + ':' + calculateTotalScore(player)}
 						</a>
