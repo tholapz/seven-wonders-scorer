@@ -7,7 +7,10 @@ var ActionTypes = ChatConstants.ActionTypes;
 var CHANGE_EVENT = 'change';
 
 var _scores = {};
-
+var cookieValue = document.cookie.replace(/(?:(?:^|.*;\s*)scores\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+if (cookieValue !== '') {
+	_scores = JSON.parse(cookieValue);
+}
 var ScoreStore = assign({}, EventEmitter.prototype, {
 	
 	emitChange: function() {
@@ -48,6 +51,7 @@ ScoreStore.dispatchToken = ChatAppDispatcher.register(function(action) {
 		default:
 		// do nothing
 	}
+	document.cookie = 'scores=' + JSON.stringify(_scores);
 });
 
 module.exports = ScoreStore;
