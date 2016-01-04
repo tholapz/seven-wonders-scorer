@@ -8,7 +8,7 @@ var CHANGE_EVENT = 'change';
 
 var _scores = {};
 
-var ScoreStore = assign({}, EventEmitter, {
+var ScoreStore = assign({}, EventEmitter.prototype, {
 	
 	emitChange: function() {
 		this.emit(CHANGE_EVENT);
@@ -16,6 +16,10 @@ var ScoreStore = assign({}, EventEmitter, {
 
 	removeChangeListener: function(callback) {
 		this.removeListener(CHANGE_EVENT, callback);
+	},
+
+	addChangeListener: function(callback) {
+		this.on(CHANGE_EVENT, callback);
 	},
 
 	getScores: function() {

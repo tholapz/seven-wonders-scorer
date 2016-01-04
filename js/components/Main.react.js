@@ -6,6 +6,20 @@ var calculateTotalScore = function(scoreObj) {
 	return 0;
 };
 var Main = React.createClass({
+	getInitialState: function() {
+		return {
+			scores: ScoreStore.getScores()
+		}
+	},
+
+	componentDidMount: function() {
+		ScoreStore.addChangeListener(this._change);
+	},
+
+	componentWillUnmount: function() {
+		ScoreStore.removeChangeListener(this._change);
+	},
+
 	handleClickNewUser: function(e) {
 		this.props.onChangeRoute(routes.NEW_USER);
 	},
@@ -14,24 +28,51 @@ var Main = React.createClass({
 
 	},
 
+	_change: function() {
+		this.setState({
+			scores: ScoreStore.getScores()
+		});
+	},
+
 	render: function() {
 		var players = [];
-		var scores = ScoreStore.getScores();
-		for (var player in scores) {
+		for (var playerName in this.state.scores) {
+			var player = this.state.scores[playerName];
 			players.push(
-				<li key={player}>
-					<a
-						href="#"
-						onClick={this.handleClickUser(scores[player])}
-					>
-					{player + ':' + calculateTotalScore(scores[player])}
-					</a>
-				</li>
+				<tr key={playerName}>
+					<td>
+						<a
+							href="#"
+							onClick={this.handleClickUser(player)}
+						>
+							{playerName + ':' + calculateTotalScore(player)}
+						</a>
+					</td>
+					<td>{player.military}</td>
+					<td>{player.treasury}</td>
+					<td>{player.wonder}</td>
+					<td>{player.civilian}</td>
+					<td>{player.commercial}</td>
+					<td>{player.guild}</td>
+					<td>{player.science}</td>
+				</tr>
 		 );
 		}
 		return (
 			<div>
-				<ul>{players}</ul>
+				<table>
+				<tr>
+					<th>Name:total</th>
+					<th>Military</th>
+					<th>Treasury</th>
+					<th>Wonder</th>
+					<th>Civilian</th>
+					<th>Commercial</th>
+					<th>Guild</th>
+					<th>Science</th>
+				</tr>
+				{players}
+				</table>
 				<a href="#" onClick={this.handleClickNewUser}>Create new user</a>;
 			</div>
 		);
