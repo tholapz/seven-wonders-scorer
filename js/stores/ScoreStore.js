@@ -7,8 +7,11 @@ var ActionTypes = ChatConstants.ActionTypes;
 var CHANGE_EVENT = 'change';
 
 var _scores = {};
-
-var ScoreStore = assign({}, EventEmitter, {
+var cookieValue = document.cookie.replace(/(?:(?:^|.*;\s*)scores\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+if (cookieValue !== '') {
+	_scores = JSON.parse(cookieValue);
+}
+var ScoreStore = assign({}, EventEmitter.prototype, {
 	
 	emitChange: function() {
 		this.emit(CHANGE_EVENT);
@@ -16,6 +19,18 @@ var ScoreStore = assign({}, EventEmitter, {
 
 	removeChangeListener: function(callback) {
 		this.removeListener(CHANGE_EVENT, callback);
+	},
+
+	addChangeListener: function(callback) {
+		this.on(CHANGE_EVENT, callback);
+	},
+
+	getScores: function() {
+		return _scores;
+	},
+
+	getPlayerByName: function(name) {
+		return _scores[name];
 	}
 
 });
@@ -40,6 +55,7 @@ ScoreStore.dispatchToken = ChatAppDispatcher.register(function(action) {
 		default:
 		// do nothing
 	}
+	document.cookie = 'scores=' + JSON.stringify(_scores);
 });
 
 module.exports = ScoreStore;

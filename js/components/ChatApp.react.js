@@ -1,54 +1,71 @@
-/**
- * This file is provided by Facebook for testing and evaluation purposes
- * only. Facebook reserves all rights not expressly granted.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
- * FACEBOOK BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN
- * AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
- * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
 var React = require('react');
-var keymirror = require('keymirror');
 
-var User = require('./User.react.js');
-var routes = keymirror({
-	'MAIN':null
-	'NEW_USER':null,
-	'MILITARY':null,
-	'TREASURY':null,
-	'WONDER':null,
-	'CIVILIAN':null,
-	'COMMERCIAL':null,
-	'GUILD':null,
-	'SCIENCE':null
-});
+var Header = require('./Header.react.js');
 
+var ChatConstants = require('../constants/ChatConstants');
+var routes = ChatConstants.routes;
+var routable = function(Component) {
+	var routableComponent = React.createClass({
+		getInitialState: function() {
+			return {
+				route: routes.MAIN
+			};
+		},
+
+		handleChangeRoute: function(route_name) {
+			this.setState({route: route_name});
+		},
+
+		render: function() {
+			return <Component
+				onChangeRoute={this.handleChangeRoute}
+				route={this.state.route}
+				{...this.props}
+			/>;
+		}
+	});
+	return routableComponent;
+}
+
+var Pages = {};
+Pages[routes.MAIN] = require('./Main.react.js');
+Pages[routes.NEW_USER] = require('./User.react.js');
+Pages[routes.MILITARY] = require('./Military.react.js');
+// Pages[routes.TREASURY] = require('./Treasury.react.js');
+// Pages[routes.WONDER] = require('./Wonder.react.js');
+// Pages[routes.CIVILIAN] = require('./Civilian.react.js');
+// Pages[routes.COMMERCIAL] = require('./Commercial.react.js');
+// Pages[routes.GUILD] = require('./Guild.react.js');
+// Pages[routes.SCIENCE] = require('./Science.react.js');
+
+var ScoreStore = require('../stores/ScoreStore');
 var ChatApp = React.createClass({
-
 	getInitialState: function() {
 		return {
-			route: routes.MAIN
+			currentPlayer: null
 		}
 	},
 
-	changeRoute: function(route_name) {
-		return function(e) {
-			this.setState({route: route_name});	
-		}.bind(this);
+	handleChangePlayer: function(playerName) {
+		this.setState({
+			currentPlayer: ScoreStore.getPlayerByName(playerName)
+		});
 	},
-
   render: function() {
-  	var content = routes[this.state.route];
-    return (
-      <div>
-      	<a href="#" onClick={this.changeRoute('new_user')}>Create new user</a>
-      </div>
-    );
+  	var Content = Pages[this.props.route];
+    return (<div>
+    	<Header
+    		isVisible={this.props.route !== routes.MAIN && this.props.route !== routes.NEW_USER}
+    		{...this.props}
+    	/>
+    	<Content
+    		onChangePlayer={this.handleChangePlayer}
+    		{...this.props}
+    		{...this.state}
+    	/>
+    </div>);
   }
 
 });
 
-module.exports = ChatApp;
+module.exports = routable(ChatApp);
