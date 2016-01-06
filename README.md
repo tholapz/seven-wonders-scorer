@@ -1,8 +1,7 @@
-## Flux Chat Example
+## 7 Wonders scorer
 
-This is an example application we've created to show an example of how a Flux
-app is structured, and how you might use waitFor to make sure the Stores'
-registered callbacks are called in the correct order.
+This is a simple app to calculate your score at the end of the game.
+[Demo here](http://tholapz.github.io/seven-wonders-scorer)
 
 ## Running
 
