@@ -11,16 +11,12 @@ var Header = React.createClass({
 	},
 	render: function() {
 		if (this.props.isVisible) {
-			return <div>
-				<a onClick={this.handleClick.call(this, routes.MILITARY)} href="#">Military</a>
-				<a onClick={this.handleClick.call(this, routes.TREASURY)} href="#">Treasury</a>
-				<a onClick={this.handleClick.call(this, routes.WONDER)} href="#">Wonder</a>
-				<a onClick={this.handleClick.call(this, routes.CIVILIAN)} href="#">Civilian</a>
-				<a onClick={this.handleClick.call(this, routes.COMMERCIAL)} href="#">Commercial</a>
-				<a onClick={this.handleClick.call(this, routes.GUILD)} href="#">Guild</a>
-				<a onClick={this.handleClick.call(this, routes.SCIENCE)} href="#">Science</a>
-			</div>;
-		};
+			var content = [];
+			for (route in routes) {
+				content.push(<a key={route} onClick={this.handleClick.call(this, route)} href="#">{route}</a>);
+			}
+			return <div>{content}</div>;
+		}
 		return null;
 	}
 });
