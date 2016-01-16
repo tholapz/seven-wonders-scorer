@@ -31,7 +31,7 @@ var Pages = {};
 Pages[routes.MAIN] = require('./Main.react.js');
 Pages[routes.NEW_USER] = require('./User.react.js');
 Pages[routes.MILITARY] = require('./Military.react.js');
-// Pages[routes.TREASURY] = require('./Treasury.react.js');
+Pages[routes.TREASURY] = require('./Treasury.react.js');
 // Pages[routes.WONDER] = require('./Wonder.react.js');
 // Pages[routes.CIVILIAN] = require('./Civilian.react.js');
 // Pages[routes.COMMERCIAL] = require('./Commercial.react.js');
@@ -56,6 +56,7 @@ var ChatApp = React.createClass({
     return (<div>
     	<Header
     		isVisible={this.props.route !== routes.MAIN && this.props.route !== routes.NEW_USER}
+    		onChangeRoute={this.props.handleChangeRoute}
     		{...this.props}
     	/>
     	<Content
